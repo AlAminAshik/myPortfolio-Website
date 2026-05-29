@@ -1,0 +1,69 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Poppins';
+}
+
+.navbar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+}
+
+.navbar_container{
+    min-width: 80vw;
+    border-radius: 10em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-height: 40px;
+    min-height: 30px;
+    padding: 20px;
+    background-color: rgb(69, 69, 69);
+}
+
+.navbar_menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    column-gap: 25px;
+}
+.navbar_item a{
+    text-decoration: none;
+    color: white;
+}
+.navbar_menu a:hover{
+    color: rgb(188, 214, 255);
+    text-decoration:overline;
+}
+.navbar_btn a{
+    margin-left: 20px;
+    margin-right: 20px;
+    text-decoration: none;
+    color: rgb(255, 255, 255);
+    border: 1px solid rgb(255, 255, 255);
+    background-color: black;
+    padding: 6px 20px;
+    border-radius: 5px;
+}
+.navbar_btn a:hover{
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: 1px solid rgb(0, 0, 0);
+}
+.navbar_container img{
+  max-width: 100px;           /* Forces the link and image to fill the dragged size */
+  max-height: 100px;
+  min-height: 100px;
+  min-width: 100px;        /* Ensures the logo does not exceed the dragged size */
+  object-fit: contain;   /* Ensures the logo maintains its aspect ratio without distorting */
+}
