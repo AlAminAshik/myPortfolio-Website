@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Form</title>
+    <link rel="stylesheet" href="contact.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <script src="https://kit.fontawesome.com/66850b7c3d.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <!-- Abstract background decoration shapes -->
+    <div class="bg-shape-container">
+        <div class="shape shape-primary"></div>
+        <div class="shape shape-secondary"></div>
+        <div class="shape shape-accent"></div>
+    </div>
+    <!-- Navbar Section -->
+    <nav class="navbar">
+      <div class="navbar_container">
+          <a href="https://alaminn.com"><img src="Media/logo_icon.webp" alt="Logo"></a>
+        <div class="navbar_toggle" id="mobile-menu">
+          <span class="bar"></span> <span class="bar"></span>
+          <span class="bar"></span>
+        </div>
+        <ul class="navbar_menu">
+          <li class="navbar_item"><a href="/home.html" class="navbar_links">Home</a></li>
+          <li class="navbar_item"><a href="/resume.html" class="navbar_links">Resume</a></li>
+          <li class="navbar_item"><a href="/achievements.html" class="navbar_links">Achievements</a></li>
+          <li class="navbar_item"><a href="#portfolio_container" class="navbar_links">Works</a></li>
+        </ul>
+      </div>
+      <div class="navbar_btn"><a href="/contact.html">Contact</a></div>
+    </nav>
+
+    <!-- form section -->
+    <div class="contact-section-wrapper">
+        <form id="contact_form">
+                <!-- To simplify the tutorial, the value is static. -->
+                <input type="hidden" name="time" value="Mar 10 2025 08:46">
+                <label>Name</label>
+                <input type="text" name="name" required>
+                <label>Email</label>
+                <input type="email" name="email" required>
+                <label>Subject</label>
+                <input type="text" name="title" required>
+                <label>Message</label>
+                <textarea name="message" required></textarea>
+                <input type="submit" value="Send">
+                <div id="status-display" class="status-box hidden"></div>
+            </form>
+        <div class="contact-info-container">
+            <h2>Let's talk!</h2>
+            <p class="mini-summary">I am avaiable for collaborations and I am excited to hear from you!</p>
+
+            <h3>Contact Information</h3>
+            <p><strong>Email:</strong> <a href="mailto:mdalaminashik555@gmail.com">mdalaminashik555@gmail.com</a></p>
+            <p><strong>Phone:</strong> <a href="tel:+8801849472106">+8801849472106</a></p>
+            <div class="social_media_container">
+                <p><strong>Social Media Links:</strong></p>
+                <div class="social_links">
+                    <a href="https://www.linkedin.com/in/md-alamin-ashik/" target="_blank"><i class="fab fa-linkedin"></i></a>
+                    <a href="https://github.com/alaminashik" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="https://web.facebook.com/ashik9971/" target="_blank"><i class="fab fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="contact.js"></script>
+</body>
+</html>

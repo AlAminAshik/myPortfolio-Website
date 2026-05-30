@@ -1,0 +1,356 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root{
+  /* Primary color palette */
+  --color-primary: #000000;
+  --color-secondary: #25232F;
+  --color-accent: #5800f0;
+  --color-border: #686868;
+
+  /* Neutral color palette */
+  --color-background: #ffffff;
+  --color-text-primary: #0f172a; 
+  --color-text-secondary: #475569;
+
+  /* Status colors */
+  --color-success-bg: #d1e7dd;
+  --color-success-text: #0f5132;
+  --color-success-border: #badbcc;
+
+  --color-error-bg: #f8d7da;
+  --color-error-text: #842029;
+  --color-error-border: #f5c2c7;
+}
+
+body {
+  min-height: 100vh;    /* covers the entire viewport height */
+  font-family: 'Poppins';
+}
+
+.navbar{
+    /* border:1px solid black; */
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: center;
+    min-height: 100px;
+    min-width: 100vw;
+    position: sticky;
+    top:0;   
+    z-index: 999;
+}
+
+.navbar_container{
+    min-width: 80vw;
+    border-radius: 10em;
+    z-index: 100;
+    /* glass effect */
+    background-color: rgba(255, 255, 255, 0.45);
+    backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(12px) saturate(160%); /* For Safari support */
+    border-bottom: 1px solid rgba(185, 185, 185, 0.5);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-height: 40px;
+    min-height: 30px;
+    padding: 20px;
+}
+
+.navbar_menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    list-style: none;
+    column-gap: 25px;
+    font-size: small;
+}
+.navbar_item a{
+    text-decoration: none;
+    color: var(--color-text-primary);
+}
+.navbar_menu a:hover{
+    color: var(--color-primary);
+    text-decoration:overline;
+}
+.navbar_btn a{
+    margin-left: 20px;
+    margin-right: 20px;
+    text-decoration: none;
+    color: var(--color-background);
+    border: 1px solid var(--color-background);
+    background-color: var(--color-primary);
+    padding: 6px 20px;
+    border-radius: 5px;
+}
+.navbar_btn a:hover{
+    background-color: var(--color-background);
+    color: var(--color-secondary);
+    border: 1px solid var(--color-secondary);
+}
+.navbar_container img{
+  max-width: 100px;           /* Forces the link and image to fill the dragged size */
+  max-height: 100px;
+  min-height: 100px;
+  min-width: 100px;        /* Ensures the logo does not exceed the dragged size */
+  object-fit: contain;   /* Ensures the logo maintains its aspect ratio without distorting */
+  filter: invert(100%);
+}
+
+
+/* abstract background decoration shapes */
+/* Container to holds the shapes safely outside the viewport flow */
+.bg-shape-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  z-index: -1; /* Sends completely behind text/cards */
+  pointer-events: none; /* Allows clicks to pass through seamlessly */
+}
+/* Common shared architecture for all shapes */
+.shape {
+  position: absolute;
+  border-radius: 50%; /* Makes them perfect circles */
+  mix-blend-mode: multiply; /* Blends the color intersections smoothly */
+  opacity: 0.35; /* Prevents the colors from overpowering white canvas */
+  filter: blur(80px); 
+}
+/* Shape 1: Deep Indigo/Purple top-left near heading/navbar */
+.shape-primary {
+  top: -100px;
+  left: -50px;
+  width: 500px;
+  height: 500px;
+  background-color: #852dff;
+}
+/* Shape 2: Vibrant Cyan on the middle-right bleeding under the contact card */
+.shape-secondary {
+  top: 350px;
+  right: -100px;
+  width: 450px;
+  height: 450px;
+  background-color: #00f2fe;
+}
+/* Shape 3: Soft Pink sitting subtle under form fields */
+.shape-accent {
+  top: 600px;
+  left: 15%;
+  width: 350px;
+  height: 350px;
+  background-color: #ff007f;
+}
+
+/* ///////////////////////////// */
+/* contact form main design */
+.contact-section-wrapper {
+  max-width: 70vw;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr; /* Form gets more space than info */
+  align-items: center;
+  gap: 32px;
+  margin-top: 24px;
+}
+
+.contact-info-container h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.contact-info-container .mini-summary {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+/* The Glassmorphic Card Style */
+#contact_form, .contact-info-container {
+  background-color: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 32px;
+  
+  /* Levitating depth properties (Permanent levitation, no hover shifts) */
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
+}
+
+/* Form Input Element Engineering */
+#contact_form {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  min-height: 600px;
+}
+/* contact info elements */
+.contact-info-container{
+  display: grid;
+  grid-template-rows: 60px 100px 60px 50px 170px 40px; /* Title, summary, and contact details */
+  min-height: 600px;
+}
+
+#contact_form label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-secondary);
+  margin-bottom: 6px;
+}
+
+#contact_form input[type="text"],
+#contact_form input[type="email"],
+#contact_form textarea {
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  font-family: inherit;
+  
+  /* Smooth focus transitions without sliding animations */
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+#contact_form input[type="text"]:focus,
+#contact_form input[type="email"]:focus,
+#contact_form textarea:focus {
+  outline: none;
+  border-color: #6200ee;
+  background-color: #ffffff;
+}
+
+#contact_form textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+/* Submit Button - Smooth color transition fade only */
+#contact_form input[type="submit"] {
+  background-color: #000000;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 28px;
+  font-size: 1rem;
+  font-weight: 400;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background-color 0.25s ease;
+}
+
+#contact_form input[type="submit"]:hover {
+  background-color: #6200ee; /* Shifts to primary accent on hover */
+}
+
+/* Contact Information Panel Style */
+.contact-info-container h3 {
+  font-size: 1.5rem;
+  color: var(--color-text-primary);
+  margin-bottom: 20px;
+}
+
+.social_media_container{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+    gap: 10px;
+}
+
+/* mail and call numbers */
+.contact-info-container a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contact-info-container a:hover {
+  color: var(--color-text-primary);
+}
+
+.social_links {
+  display: flex;
+  justify-content: start;
+  gap: 16px;
+}
+
+.social_links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid #e2e8f0;
+  border-radius: 50%;
+  color: #334155;
+  font-size: 1.2rem;
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+}
+
+.social_links a:hover {
+  background-color: #000000;
+  color: #ffffff;
+  border-color: #000000;
+}
+
+/* Dynamic Feedback Box (Success / Error States) */
+.status-box {
+  grid-column: 1 / -1; /* Forces the alert box to span full page width */
+  padding: 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 5px;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.status-success {
+  background-color: #d1e7dd;
+  color: #0f5132;
+  border: 1px solid #badbcc;
+}
+
+.status-failed {
+  background-color: #f8d7da;
+  color: #842029;
+  border: 1px solid #f5c2c7;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ==========================================================================
+   7. Mobile Layout Responsiveness
+   ========================================================================== */
+@media (max-width: 768px) {
+  .contact-section-wrapper {
+    grid-template-columns: 1fr; /* Stacks form on top of info cards */
+    gap: 24px;
+  }
+}
+
+
+
+
+
