@@ -5,15 +5,18 @@
 }
 
 body {
+    min-height: 100vh;
   font-family: 'Poppins';
 }
 
 .navbar{
-    display: flex;
+    border:1px solid black;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     justify-content: center;
     min-height: 100px;
+    min-width: 100vw;
 }
 
 .navbar_container{
@@ -26,7 +29,7 @@ body {
     max-height: 40px;
     min-height: 30px;
     padding: 20px;
-    background-color: rgb(69, 69, 69);
+    background-color: #12151C;
 }
 
 .navbar_menu {
@@ -66,4 +69,97 @@ body {
   min-height: 100px;
   min-width: 100px;        /* Ensures the logo does not exceed the dragged size */
   object-fit: contain;   /* Ensures the logo maintains its aspect ratio without distorting */
+}
+
+
+/* hero section */
+#hero_section{
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero_container{
+    min-width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    background-color: transparent;
+
+    background: linear-gradient(
+    0deg,
+    #ffffff 0%,
+    #ffffff 0%,
+    rgba(0, 114, 190, 0.173) 30%,
+    #ffffff 100%,
+    #ffffff 100%
+    );
+    padding: 2rem;
+}
+.hero_content .hero_content a{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    gap: 10px;
+}
+.hero_container h3{
+    font-size: 1.5rem;
+    color: #12151C;
+}
+.hero_container p{
+    font-size: 1.5rem;
+    color: #12151C;
+}
+.hero_container h1{
+    font-size: 5.5rem;
+    line-height: 1;
+    color: #12151C;
+}
+
+.hero_container img{
+    margin-top: -50px;
+    max-width: 500px;
+    max-height: 500px;
+    min-width: 400px;
+    min-height: 400px;
+    object-fit: contain;
+}
+
+.hero_content .button_section{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    gap: 20px;
+}
+
+.hero_content .button{
+    margin-top: 10px;
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    padding: 4px 30px;
+    border-radius: 5px;
+    opacity: 0.8;
+}
+.hero_content .button:hover{
+    background-color: transparent;
+    color: rgb(0, 0, 0);
+    border: 1px solid rgb(255, 255, 255);
+}
+
+.hero_content .social_links{
+    display: flex;
+    min-height: 150px;
+    flex-direction: row;
+    justify-content: start;
+    align-items: end;
+    align-content: end;
+    gap: 10px;
+    font-size: 2rem;
+    color: black;
 }
