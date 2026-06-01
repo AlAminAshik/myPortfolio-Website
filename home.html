@@ -11,20 +11,27 @@
     <!-- Navbar Section -->
     <nav class="navbar">
       <div class="navbar_container">
-          <a href="https://alaminn.com"><img src="Media/logo_icon.webp" alt="Logo"></a>
-        <div class="navbar_toggle" id="mobile-menu">
-          <span class="bar"></span> <span class="bar"></span>
-          <span class="bar"></span>
-        </div>
+        <a href="https://alaminn.com"><img src="Media/logo_icon.webp" alt="Logo"></a>
         <ul class="navbar_menu">
           <li class="navbar_item" class="active"><a href="/home.html" class="navbar_links">Home</a></li>
           <li class="navbar_item"><a href="https://drive.google.com/file/d/19bN-XTQyhbxBYd3h4qWzeZ3-zzaGW2c9/view?usp=sharing" class="navbar_links">Resume</a></li>
           <li class="navbar_item"><a href="/milestone.html" class="navbar_links">Milestones</a></li>
           <li class="navbar_item"><a href="#portfolio_container" class="navbar_links">Works</a></li>
         </ul>
+        <button class="hamburger" id="navbar_toggle"><i class="fa-solid fa-bars"></i></button>
       </div>
       <div class="navbar_btn"><a href="/contact.html">Contact</a></div>
     </nav>
+    <!-- mobile menu -->
+    <div class="mobile_menu_container">
+      <ul class="mobile_menu_items">
+        <li class="mobile_menu_item"><a href="/home.html" class="navbar_links">Home</a></li>
+        <li class="mobile_menu_item"><a href="https://drive.google.com/file/d/19bN-XTQyhbxBYd3h4qWzeZ3-zzaGW2c9/view?usp=sharing" class="navbar_links">Resume</a></li>
+        <li class="mobile_menu_item"><a href="/milestone.html" class="navbar_links">Milestones</a></li>
+        <li class="mobile_menu_item"><a href="#portfolio_container" class="navbar_links">Works</a></li>
+      </ul>
+    </div>
+
     <!-- hero section -->
     <section id="hero_section">
       <div class="hero_container">
@@ -95,5 +102,6 @@
       </footer>
 
     <script src="https://kit.fontawesome.com/66850b7c3d.js" crossorigin="anonymous"></script>
+    <script src="/home page/home.js"></script>
 </body>
 </html>
