@@ -104,7 +104,122 @@ body {
   object-fit: contain;   /* Ensures the logo maintains its aspect ratio without distorting */
   filter: invert(100%);
 }
+/* PREMIUM GLASS FOOTER */
+.footer {
+    position: relative;
+    margin: 80px auto 20px;
+    max-width: 1200px;
 
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+
+    overflow: hidden;
+    padding: 40px 20px 20px;
+
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.25),
+        inset 0 1px 1px rgba(255,255,255,0.08);
+}
+
+/* Glow Effect */
+.footer::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(120, 190, 255, 0.18),
+            transparent 55%
+        );
+    pointer-events: none;
+}
+
+.social_links_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.social_links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+/* Icons */
+.social_links a {
+    width: 58px;
+    height: 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    font-size: 1.4rem;
+    color: #ffffff;
+    border-radius: 18px;
+
+    background: rgba(167, 167, 167, 0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(10px);
+    transition: all 0.35s ease;
+}
+
+.social_links a:hover {
+    transform: translateY(-6px);
+    background: rgba(120, 190, 255, 0.18);
+    border-color: rgba(120, 190, 255, 0.4);
+    box-shadow:
+        0 0 20px rgba(120,190,255,0.25),
+        0 0 40px rgba(120,190,255,0.15);
+}
+
+/* Divider */
+.vertical-bar {
+    width: 1px;
+    height: 28px;
+
+    background: linear-gradient(
+        to bottom,
+        transparent,
+        rgba(255,255,255,0.4),
+        transparent
+    );
+}
+
+/* Bottom Section */
+.footer_bottom {
+    margin-top: 15px;
+    padding-top: 15px;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.32);
+}
+
+.footer_bottom p {
+    color: rgba(255,255,255,0.75);
+
+    font-size: 0.95rem;
+    letter-spacing: 0.4px;
+    margin: 0;
+}
+
+.footer_bottom a {
+    color: #9ecbff;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.footer_bottom a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 12px rgba(158,203,255,0.8);
+}
 
 /* abstract background decoration shapes */
 /* Container to holds the shapes safely outside the viewport flow */
@@ -132,7 +247,7 @@ body {
   left: -50px;
   width: 500px;
   height: 500px;
-  background-color: #852dff;
+  background-color: #302dff;
 }
 /* Shape 2: Vibrant Cyan on the middle-right bleeding under the contact card */
 .shape-secondary {
@@ -148,7 +263,7 @@ body {
   left: 15%;
   width: 350px;
   height: 350px;
-  background-color: #ff007f;
+  background-color: #00ffb3;
 }
 
 /* ///////////////////////////// */
@@ -268,7 +383,7 @@ body {
   margin-bottom: 20px;
 }
 
-.social_media_container{
+.social_linkss_container{
     display: flex;
     flex-direction: column;
     justify-content: start;
@@ -287,13 +402,13 @@ body {
   color: var(--color-text-primary);
 }
 
-.social_links {
+.social_linkss {
   display: flex;
   justify-content: start;
   gap: 16px;
 }
 
-.social_links a {
+.social_linkss a {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -307,7 +422,7 @@ body {
   transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
 }
 
-.social_links a:hover {
+.social_linkss a:hover {
   background-color: #000000;
   color: #ffffff;
   border-color: #000000;
@@ -340,9 +455,6 @@ body {
   display: none;
 }
 
-/* ==========================================================================
-   7. Mobile Layout Responsiveness
-   ========================================================================== */
 @media (max-width: 768px) {
   .contact-section-wrapper {
     grid-template-columns: 1fr; /* Stacks form on top of info cards */
