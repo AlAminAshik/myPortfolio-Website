@@ -532,10 +532,26 @@ body {
 .hidden {
   display: none;
 }
-@media (max-width: 780px) {
+@media screen and (max-width: 680px) {
   .contact-section-wrapper {
-    grid-template-columns: 1fr; /* Stacks form on top of info cards */
-    gap: 24px;
+      grid-template-columns: 1fr;
+      max-width: 95vw;
+      gap: 20px;
+      margin-top: 16px;
+  }
+  #contact_form, .contact-info-container {
+      padding: 20px;
+  }
+  #contact_form {
+      min-height: unset;
+  }
+  .contact-info-container {
+      grid-template-rows: unset;
+      min-height: unset;
+      gap: 12px;
+  }
+  .contact-info-container h2 {
+      font-size: 1.8rem;
   }
 }
 
