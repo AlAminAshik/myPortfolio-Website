@@ -183,6 +183,14 @@ body {
         display: block;
     }
 }
+#active{
+    text-decoration: overline;
+    text-decoration-color: #0f172a;
+}
+#works_active.decorated{
+    text-decoration: overline;
+    text-decoration-color: #0f172a;
+}
 /* navbar ends here */
 
 

@@ -6,6 +6,7 @@
     <title>Alaminn portfolio</title>
     <link rel="stylesheet" href="home page/home.css">
     <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/favicon-300x300.png">
 </head>
 <body>
     <!-- Navbar Section -->
@@ -13,10 +14,10 @@
       <div class="navbar_container">
         <a href="https://alaminn.com"><img src="Media/logo_icon.webp" alt="Logo"></a>
         <ul class="navbar_menu">
-          <li class="navbar_item" class="active"><a href="/home.html" class="navbar_links">Home</a></li>
+          <li class="navbar_item" id="active"><a href="/home.html" class="navbar_links">Home</a></li>
           <li class="navbar_item"><a href="https://drive.google.com/file/d/19bN-XTQyhbxBYd3h4qWzeZ3-zzaGW2c9/view?usp=sharing" class="navbar_links">Resume</a></li>
           <li class="navbar_item"><a href="/milestone.html" class="navbar_links">Milestones</a></li>
-          <li class="navbar_item"><a href="#portfolio_container" class="navbar_links">Works</a></li>
+          <li class="navbar_item" id="works_active"><a href="#portfolio_container" class="navbar_links">Works</a></li>
         </ul>
         <button class="hamburger" id="navbar_toggle"><i class="fa-solid fa-bars"></i></button>
       </div>
@@ -25,10 +26,10 @@
     <!-- mobile menu -->
     <div class="mobile_menu_container">
       <ul class="mobile_menu_items">
-        <li class="mobile_menu_item"><a href="/home.html" class="navbar_links">Home</a></li>
+        <li class="mobile_menu_item" id="active"><a href="/home.html" class="navbar_links">Home</a></li>
         <li class="mobile_menu_item"><a href="https://drive.google.com/file/d/19bN-XTQyhbxBYd3h4qWzeZ3-zzaGW2c9/view?usp=sharing" class="navbar_links">Resume</a></li>
         <li class="mobile_menu_item"><a href="/milestone.html" class="navbar_links">Milestones</a></li>
-        <li class="mobile_menu_item"><a href="#portfolio_container" class="navbar_links">Works</a></li>
+        <li class="mobile_menu_item" id="works_active"><a href="#portfolio_container" class="navbar_links">Works</a></li>
       </ul>
     </div>
     <!-- navbar ends here -->
@@ -78,7 +79,7 @@
           </div>
           <div class="work_card">
             <img src="Media/3d_model_icon.png" alt="3DWork">
-            <a href="#" target="_self" class="button">3D modeling works</a>
+            <a href="https://www.printables.com/@MdAlAminAshi_4923978" target="_self" class="button">3D modeling works</a>
           </div>
         </div>
      </div>
