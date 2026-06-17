@@ -302,12 +302,14 @@ body {
 }
 @media screen and (max-width: 780px) {
     .footer {
+        display: flex;
+        flex-direction: column;
         margin: 40px 12px 16px;
         padding: 28px 14px 16px;
         border-radius: 18px;
     }
     .social_links {
-        gap: 14px;
+        gap: 10px;
     }
     .social_links a {
         width: 48px;
@@ -371,6 +373,7 @@ body {
 .hero_container h1{
     font-size: 5.5rem;
     color: #12151C;
+    line-height: 1.0;
 }
 
 .hero_container img{
@@ -644,10 +647,14 @@ body {
         object-fit: cover;
     }
     .server_info_content li{
-        font-size: 0.85rem;
+        font-size: 0.7rem;
     }
     .server_info_content p{
         display: none;
+    }
+    .server_info_content .button{
+        padding: 6px 14px;
+        font-size: 0.7rem;
     }
 }
 
