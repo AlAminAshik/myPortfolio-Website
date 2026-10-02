@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gallery | Al Amin Ashik</title>
+
+    <meta name="description"
+        content="Gallery of projects, experiments, designs and engineering works by me.">
+
+    <link rel="stylesheet" href="css/gallery.css">
+</head>
+
+
+<body>
+         <!-- HEADER -->
+    <header class="gallery-header">
+        <div class="title-row">
+            <div>
+                <h1>Gallery</h1>
+                <p class="subtitle">
+                    Projects, experiments, designs and engineering works.
+                </p>
+            </div>
+            <div id="status" class="status">
+                Loading...
+            </div>
+        </div>
+    </header>
+
+
+         <!-- CATEGORY FILTERS -->
+    <div id="filters" class="filters">
+    </div>
+
+         <!-- GALLERY GRID -->
+    <main id="gallery" class="gallery">
+        <div class="message">
+            Loading gallery...
+        </div>
+    </main>
+
+
+         <!-- LIGHTBOX -->
+    <div id="lightbox" class="lightbox">
+        <button id="closeBtn" class="lightbox-button close" aria-label="Close image">
+            &times;
+        </button>
+        <button id="prevBtn" class="lightbox-button prev" aria-label="Previous image">
+            &#8249;
+        </button>
+        <img id="lightboxImage" src="" alt="">
+        <button id="nextBtn" class="lightbox-button next" aria-label="Next image">
+            &#8250;
+        </button>
+    </div>
+
+    <!-- Gallery JavaScript -->
+    <script src="js/gallery.js"></script>
+
+</body>
+</html>
