@@ -494,6 +494,7 @@ body {
     align-content: center;
     max-width: 90vw;
     margin: auto;
+		padding-bottom: 20px;
 }
 
 .work_cards_container{
@@ -502,14 +503,20 @@ body {
     justify-content: space-between;
     gap: 20px;
     border-radius: 10px;
-    padding-bottom: 15px;
     width: 100%;
 }
 .work_cards_container h2{
     grid-column: 1 / -1;
     text-align: start;
-    font-size: 2rem;
-    color: #12151C;
+    color: #000000;
+    font-size:
+        clamp(
+            2rem,
+            4vw,
+            5rem
+        );
+    line-height: 0.95;
+    letter-spacing: 0em;
 }
 .work_card{
     display: grid;
@@ -579,10 +586,10 @@ body {
 
 .home_gallery_preview {
     width: 90vw;
-    margin: 35px auto 25px;
+		padding-bottom: 20px;
+		margin: 0 auto;
     position: relative;
 }
-
 
 .home_gallery_inner {
     position: relative;
@@ -915,9 +922,7 @@ body {
         0.9rem;
 }
 
-
    /* BOTTOM CTA */
-
 .home_gallery_bottom {
     position: relative;
     z-index: 2;
@@ -928,13 +933,11 @@ body {
     margin-top: 22px;
 }
 
-
 .home_gallery_teaser {
     display: flex;
     flex-direction: column;
     gap: 3px;
 }
-
 
 .home_gallery_teaser span {
     color:
@@ -944,7 +947,6 @@ body {
     font-weight: 600;
 }
 
-
 .home_gallery_teaser small {
     color:
         rgba(255,255,255,.45);
@@ -952,9 +954,7 @@ body {
         .78rem;
 }
 
-
    /* CTA button */
-
 .home_gallery_button {
     display: inline-flex;
     align-items: center;
@@ -980,7 +980,6 @@ body {
         background .25s ease;
 }
 
-
 .home_gallery_button:hover {
     transform:
         translateY(-3px);
@@ -989,7 +988,6 @@ body {
         0 15px 38px
         rgba(0,0,0,.3);
 }
-
 
 .home_gallery_arrow {
     width: 30px;
@@ -1007,7 +1005,6 @@ body {
         transform .25s ease;
 }
 
-
 .home_gallery_button:hover
 .home_gallery_arrow {
     transform:
@@ -1019,21 +1016,18 @@ body {
 @media screen and (max-width: 780px) {
     .home_gallery_preview {
         width: 90vw;
-        margin-top: 25px;
     }
-
 
     .home_gallery_inner {
         padding: 24px;
         border-radius: 22px;
     }
 
-
     .home_gallery_heading {
         flex-direction: column;
+        align-items: flex-start;
         margin-bottom: 20px;
     }
-
 
     .home_gallery_heading h2 {
         font-size:
@@ -1044,18 +1038,15 @@ body {
             );
     }
 
-
     .home_gallery_heading p {
         font-size: .85rem;
         line-height: 1.6;
     }
 
-
     .home_gallery_live {
         align-self:
             flex-start;
     }
-
 
     .home_gallery_grid {
         grid-template-columns:
@@ -1065,17 +1056,14 @@ body {
         gap: 9px;
     }
 
-
     .home_gallery_card:nth-child(1) {
         grid-row:
             1 / 3;
     }
 
-
     .home_gallery_card:nth-child(n+5) {
         display: none;
     }
-
 
     .home_gallery_bottom {
         flex-direction: column;
@@ -1083,13 +1071,11 @@ body {
             flex-start;
     }
 
-
     .home_gallery_button {
         width: 100%;
         justify-content:
             space-between;
     }
-
 }
 
 
@@ -1123,6 +1109,7 @@ body {
 /* gallery section ends here */
 
 
+
 /* server information section starts here */
 .server_info_container_master{
     display: flex;
@@ -1149,9 +1136,15 @@ body {
 }
 .server_info_container h2 {
     grid-column: 1 / -1;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: var(--color-secondary);
+color: #000000;
+    font-size:
+        clamp(
+            2rem,
+            3vw,
+            5rem
+        );
+    line-height: 0.95;
+    letter-spacing: 0.0em;
     margin: 0 0 4px;
 }
 .server_info_content {
@@ -1225,6 +1218,168 @@ body {
 /* server info ends here */
 
 
+
+/* other platform sections starts here */
+.server-showcase {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	margin: auto;
+	max-width: 90vw;
+	padding-bottom: 20px;
+	margin-bottom: 20px;
+  background:
+        radial-gradient(
+            circle at 85% 15%,
+            rgba(88, 0, 240, 0.28),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 10% 90%,
+            rgba(0, 114, 190, 0.22),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #383883 0%,
+            #171724 55%,
+            #12122f 100%
+        );
+  text-align: center;
+	border-radius: 20px;
+}
+
+.server-showcase .container {
+  max-width: 90vw;
+  margin: 0 auto;
+	padding: 24px;
+}
+
+.section-title { 
+	color: #000000;
+    font-size:
+        clamp(
+            2rem,
+            3vw,
+            5rem
+        );
+    line-height: 0.95;
+    letter-spacing: 0.0em;
+	color: #ffffff;
+	padding-bottom: 5px;
+}
+.section-subtitle { 
+	color: #b2b2b6; margin-bottom: 40px; 
+}
+
+/* Centered 3-Column Grid */
+.server-grid {
+  display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	justify-content: space-between;
+	gap: 20px;
+	padding: 0 20px;
+	max-width: 90vw;
+	margin: auto;
+}
+
+/* Native Clickable Link Cards */
+.server-card {
+  background-color: #ffffff00;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 5px 4px 15px rgba(0, 0, 0, 0.6);
+}
+
+.server-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 113, 227, 0.25);
+}
+
+/* 16:9 Aspect Ratio Images */
+.card-image-wrapper {
+  position: relative;
+  padding-top: 56.25%;
+  background-color: #2a2a30;
+}
+
+.card-image {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  object-fit: cover;
+}
+
+/* Content & Typography */
+.card-content {
+  padding: 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-content h3 { 
+	font-size: 1.3rem; margin-bottom: 10px; 
+	color: #b59aff;
+}
+.card-content p { 
+	color: #a1a1a6; font-size: 0.9rem; line-height: 1.4; margin-bottom: 20px; flex-grow: 1; 
+}
+
+/* Mobile View Settings (Screens 768px and down) */
+@media (max-width: 768px) {
+  .server-showcase {
+    /* Change from row to column so the container stacks naturally on mobile */
+    flex-direction: column; 
+    max-width: 90vw;
+		padding-top: 20px;
+  }
+
+  .server-showcase .container {
+    max-width: 100%;
+    padding: 16px 10px; /* Reduce padding on narrow screens */
+  }
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .section-subtitle {
+    margin-bottom: 25px; /* Bring the title and cards slightly closer */
+		font-size: 0.9rem;
+  }
+
+  .server-grid {
+    grid-template-columns: repeat(2, 1fr); /* Stack cards vertically */
+    gap: 20px;
+    padding: 0 10px;
+    max-width: 100%;
+  }
+
+  /* Make the cards slightly more compact for better scrolling */
+  .card-content {
+    padding: 16px;
+  }
+
+	.card-content h3 { 
+	font-size: 1rem; margin-bottom: 10px; 
+	color: #b59aff;
+	}
+	.card-content p { 
+		color: #a1a1a6; font-size: 0.8rem; line-height: 1.4; margin-bottom: 20px; flex-grow: 1; 
+	}
+}
+
+
+/* other platforms section ends here */
+
+
+
+
 /* Skills Section */
 .skills_container_master{
     display: flex;
@@ -1248,8 +1403,15 @@ body {
     box-shadow: 0 20px 30px rgba(0, 0, 0, 0.07);
 }
 .skills_content h2 {
-    font-size: 1.8rem;
     font-weight: 600;
+		font-size:
+        clamp(
+            2rem,
+            3vw,
+            5rem
+        );
+    line-height: 0.95;
+    letter-spacing: 0.0em;
     color: var(--color-secondary);
     margin: 0 0 24px;
 }
@@ -1316,7 +1478,14 @@ body {
     box-shadow:0 20px 30px rgba(0,0,0,.07);
 }
 .publication_content h2 {
-    font-size: 1.8rem;
+    font-size:
+        clamp(
+            2rem,
+            3vw,
+            5rem
+        );
+    line-height: 0.95;
+    letter-spacing: 0.0em;
     font-weight: 600;
     color: var(--color-secondary);
     margin: 0 0 24px;
