@@ -1,5 +1,6 @@
 const navbarToggle = document.getElementById("navbar_toggle");
 const mobileMenu = document.querySelector(".mobile_menu_container");
+const navbar = document.querySelector(".navbar"); // Grab the navbar element
 
 // toggle mobile menu on hamburger click
 navbarToggle.addEventListener("click", () => {
@@ -20,17 +21,25 @@ window.addEventListener("resize", () => {
     }
 });
 
-// highlight works on navbar when scrolled down
+// Handle navbar expansions and active decorations on scroll
 window.addEventListener('scroll', () => {
   const targetText = document.getElementById('works_active');
   
-  // Check if the user has scrolled down more than 200px
-  if (window.scrollY > 200) {
+  // 1. Expand navbar to full screen width after scrolling down 50px
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+
+  // 2. Highlight works menu link when scrolled down past 200px
+  if (window.scrollY > 200 && window.scrollY < 1000) {
     targetText.classList.add('decorated');
   } else {
     targetText.classList.remove('decorated');
   }
 });
+
 
 // gallery section starts here
 
@@ -48,12 +57,12 @@ const homeGalleryGrid =
  */
 
 const HOME_GALLERY_PREFERRED_CATEGORIES = [
-    "circuitWorks",
-    "devicesMade",
-    "3dWorks",
-    "hardwareWorks",
-    "infrastructureWorks",
-    "interiorWorks"
+    "Circuit Works",
+    "Devices Made",
+    "3d Works",
+    "Hardware Works",
+    "Infrastructure Works",
+    "Interior Works"
 ];
 
 //    LOAD SELECTED GALLERY IMAGES
@@ -159,12 +168,12 @@ function renderHomeGalleryPreview(
             const card =
                 document.createElement("a");
             card.href =
-                "/gallery.html";
+                "gallery.html";
             card.className =
                 "home_gallery_card";
             card.setAttribute(
                 "aria-label",
-                `View ${image.name}`
+                `View ${image.name.replace(/\.[^/.]+$/, "")}`
             );
             //    IMAGE
             const img =

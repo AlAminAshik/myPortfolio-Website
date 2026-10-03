@@ -1,15 +1,45 @@
+const navbarToggle = document.getElementById("navbar_toggle");
+const mobileMenu = document.querySelector(".mobile_menu_container");
+const navbar = document.querySelector(".navbar"); // Grab the navbar element
 
-//    CONFIGURATION
+// toggle mobile menu on hamburger click
+navbarToggle.addEventListener("click", () => {
+    mobileMenu.classList.toggle("active");
+});
 
+// close mobile menu when clicking outside of it
+document.addEventListener("click", (e) => {
+    if (!mobileMenu.contains(e.target) && !navbarToggle.contains(e.target)) {
+        mobileMenu.classList.remove("active");
+    }
+});
 
+// close mobile menu when window is resized to desktop view 
+window.addEventListener("resize", () => {
+    if (window.innerWidth > 960) {
+        mobileMenu.classList.remove("active");
+    }
+});
+
+// Handle navbar expansions and active decorations on scroll
+window.addEventListener('scroll', () => {
+  const targetText = document.getElementById('works_active');
+  
+  // Expand navbar to full screen width after scrolling down 50px
+  if (window.scrollY > 50) {
+    navbar.classList.add('scrolled');
+  } else {
+    navbar.classList.remove('scrolled');
+  }
+});
+
+//    API CONFIGURATION
 const API_URL =
     "https://gallery.alaminn.com/api/images";
 
 
 
 //    DOM ELEMENTS
-
-
 const gallery =
     document.getElementById("gallery");
 
@@ -37,8 +67,6 @@ const nextBtn =
 
 
 //    GLOBAL STATE
-
-
 let images = [];
 let visibleImages = [];
 let currentIndex = 0;
@@ -46,8 +74,6 @@ let currentIndex = 0;
 
 
 //    LOAD GALLERY
-
-
 async function loadGallery() {
 
     try {
@@ -131,8 +157,6 @@ async function loadGallery() {
 
 
    //    CREATE CATEGORY FILTERS
-
-
 function createFilters(categories) {
 
     filters.innerHTML = "";
@@ -447,8 +471,6 @@ function renderGallery(category) {
 
 
 //    OPEN LIGHTBOX
-
-
 function openLightbox(index) {
 
     if (
