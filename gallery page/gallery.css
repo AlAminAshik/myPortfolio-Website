@@ -528,8 +528,16 @@ h1 {
    /* LIGHTBOX */
 
 .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    align-items: center;
+    justify-content: center;
     padding: 24px;
     box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.88);
+    overflow: auto;
 }
 
 .lightbox.open {
