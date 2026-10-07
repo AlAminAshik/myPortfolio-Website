@@ -1,9 +1,7 @@
 /* ============================================================
-   GALLERY MANAGEMENT CONTROLS
-   Loaded after the existing gallery.css so these rules can
-   enhance the existing lightbox without changing the gallery
-   grid styling.
-   ============================================================ */
+   GALLERY MANAGEMENT / PROTECTED CATEGORY UI
+   Keep the existing gallery.css. Load this file after it.
+============================================================ */
 
 .lightbox {
     position: fixed;
@@ -44,6 +42,7 @@
 .lightbox-filename {
     max-width: 100%;
     text-align: center;
+    color: #fff;
     font-size: 0.95rem;
     line-height: 1.4;
     overflow-wrap: anywhere;
@@ -56,6 +55,7 @@
     max-height: calc(100vh - 180px);
     object-fit: contain;
     display: block;
+    border-radius: 8px;
 }
 
 .lightbox-controls {
@@ -104,9 +104,19 @@
     border-color: rgba(255, 150, 150, 0.9);
 }
 
+/* Protected category indicator */
+.filter-btn.protected-category::after {
+    content: "Protected";
+    margin-left: 7px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-size: 0.62em;
+    opacity: 0.7;
+}
+
 /* ============================================================
-   RENAME / DELETE MODALS
-   ============================================================ */
+   MODALS
+============================================================ */
 
 .action-modal {
     position: fixed;
@@ -169,14 +179,8 @@
     box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
 }
 
-.delete-target-name {
-    margin: 0 0 16px;
-    padding: 11px 12px;
-    border-radius: 8px;
-    background: #f3f3f3;
-    font-size: 0.92rem;
-    font-weight: 600;
-    overflow-wrap: anywhere;
+select.action-field {
+    cursor: pointer;
 }
 
 .action-error {
@@ -185,6 +189,16 @@
     color: #b42318;
     font-size: 0.9rem;
     line-height: 1.4;
+}
+
+.delete-target-name {
+    margin: 0 0 16px;
+    padding: 11px 12px;
+    border-radius: 8px;
+    background: #f3f3f3;
+    font-size: 0.92rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
 }
 
 .action-modal-buttons {

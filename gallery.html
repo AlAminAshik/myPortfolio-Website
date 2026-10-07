@@ -67,7 +67,8 @@
     </main>
 
 
-         <!-- LIGHTBOX -->
+
+    <!-- LIGHTBOX -->
     <div id="lightbox" class="lightbox" aria-hidden="true">
         <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="Gallery image viewer">
             <div class="lightbox-header">
@@ -79,6 +80,7 @@
             <div class="lightbox-controls">
                 <button id="prevBtn" class="lightbox-action" type="button">Previous</button>
                 <button id="renameBtn" class="lightbox-action" type="button">Rename</button>
+                <button id="moveBtn" class="lightbox-action" type="button">Move</button>
                 <button id="deleteBtn" class="lightbox-action lightbox-action-danger" type="button">Delete</button>
                 <button id="nextBtn" class="lightbox-action" type="button">Next</button>
                 <button id="closeBtn" class="lightbox-action" type="button">Close</button>
@@ -86,8 +88,27 @@
         </div>
     </div>
 
+    <!-- OTHERS PASSWORD MODAL -->
+    <div id="othersModal" class="action-modal" aria-hidden="true">
+        <div class="action-modal-panel" role="dialog" aria-modal="true" aria-labelledby="othersModalTitle">
+            <h2 id="othersModalTitle">Protected category</h2>
+            <p class="action-modal-description">
+                The Others category is protected. Enter password to view these images.
+            </p>
 
-    
+            <label class="action-field-label" for="othersPassword">Gallery password</label>
+            <input id="othersPassword" class="action-field" type="password" autocomplete="current-password">
+
+            <div id="othersError" class="action-error" role="alert"></div>
+
+            <div class="action-modal-buttons">
+                <button id="othersCancelBtn" class="action-modal-button" type="button">Cancel</button>
+                <button id="othersUnlockBtn" class="action-modal-button action-modal-primary" type="button">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+
     <!-- RENAME MODAL -->
     <div id="renameModal" class="action-modal" aria-hidden="true">
         <div class="action-modal-panel" role="dialog" aria-modal="true" aria-labelledby="renameModalTitle">
@@ -105,6 +126,27 @@
             <div class="action-modal-buttons">
                 <button id="renameCancelBtn" class="action-modal-button" type="button">Cancel</button>
                 <button id="renameSaveBtn" class="action-modal-button action-modal-primary" type="button">Save</button>
+            </div>
+        </div>
+    </div>
+
+        <!-- MOVE MODAL -->
+    <div id="moveModal" class="action-modal" aria-hidden="true">
+        <div class="action-modal-panel" role="dialog" aria-modal="true" aria-labelledby="moveModalTitle">
+            <h2 id="moveModalTitle">Move image</h2>
+            <p class="action-modal-description">Choose the destination folder.</p>
+
+            <label class="action-field-label" for="moveCategory">Move to</label>
+            <select id="moveCategory" class="action-field"></select>
+
+            <label class="action-field-label" for="movePassword">Gallery password</label>
+            <input id="movePassword" class="action-field" type="password" autocomplete="current-password">
+
+            <div id="moveError" class="action-error" role="alert"></div>
+
+            <div class="action-modal-buttons">
+                <button id="moveCancelBtn" class="action-modal-button" type="button">Cancel</button>
+                <button id="moveSaveBtn" class="action-modal-button action-modal-primary" type="button">Move</button>
             </div>
         </div>
     </div>

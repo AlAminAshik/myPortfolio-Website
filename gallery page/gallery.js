@@ -33,10 +33,13 @@ window.addEventListener('scroll', () => {
   }
 });
 
-//    API CONFIGURATION
 
-const API_URL = "https://gallery.alaminn.com/api/images";
+// ============================================================
+// API CONFIGURATION
+// ============================================================
+
 const API_BASE_URL = "https://gallery.alaminn.com";
+const API_URL = `${API_BASE_URL}/api/images`;
 
 // ============================================================
 // DOM ELEMENTS
@@ -47,7 +50,6 @@ const filters = document.getElementById("filters");
 const status = document.getElementById("status");
 
 const lightbox = document.getElementById("lightbox");
-const lightboxPanel = document.querySelector(".lightbox-panel");
 const lightboxImage = document.getElementById("lightboxImage");
 const lightboxFilename = document.getElementById("lightboxFilename");
 
@@ -55,8 +57,17 @@ const closeBtn = document.getElementById("closeBtn");
 const prevBtn = document.getElementById("prevBtn");
 const nextBtn = document.getElementById("nextBtn");
 const renameBtn = document.getElementById("renameBtn");
+const moveBtn = document.getElementById("moveBtn");
 const deleteBtn = document.getElementById("deleteBtn");
 
+// Others unlock modal
+const othersModal = document.getElementById("othersModal");
+const othersPassword = document.getElementById("othersPassword");
+const othersError = document.getElementById("othersError");
+const othersCancelBtn = document.getElementById("othersCancelBtn");
+const othersUnlockBtn = document.getElementById("othersUnlockBtn");
+
+// Rename modal
 const renameModal = document.getElementById("renameModal");
 const renameFilename = document.getElementById("renameFilename");
 const renamePassword = document.getElementById("renamePassword");
@@ -64,6 +75,15 @@ const renameError = document.getElementById("renameError");
 const renameCancelBtn = document.getElementById("renameCancelBtn");
 const renameSaveBtn = document.getElementById("renameSaveBtn");
 
+// Move modal
+const moveModal = document.getElementById("moveModal");
+const moveCategory = document.getElementById("moveCategory");
+const movePassword = document.getElementById("movePassword");
+const moveError = document.getElementById("moveError");
+const moveCancelBtn = document.getElementById("moveCancelBtn");
+const moveSaveBtn = document.getElementById("moveSaveBtn");
+
+// Delete modal
 const deleteModal = document.getElementById("deleteModal");
 const deleteFilename = document.getElementById("deleteFilename");
 const deletePassword = document.getElementById("deletePassword");
@@ -73,16 +93,26 @@ const deleteCancelBtn = document.getElementById("deleteCancelBtn");
 const deleteConfirmBtn = document.getElementById("deleteConfirmBtn");
 
 // ============================================================
-// GLOBAL STATE
+// STATE
 // ============================================================
 
-let images = [];
+let publicImages = [];
+let protectedImages = [];
 let visibleImages = [];
-let currentIndex = 0;
+
+let publicCategories = [];
+let protectedCategories = [];
+let allCategories = [];
+
 let currentCategory = "all";
+let currentIndex = 0;
+
+// Short-lived token issued by the server after Others password succeeds.
+let othersAccessToken = null;
+let othersAccessExpiresAt = 0;
 
 // ============================================================
-// SMALL HELPERS
+// HELPERS
 // ============================================================
 
 function setModalOpen(modal, open) {
@@ -96,26 +126,29 @@ function setLightboxOpen(open) {
 
     if (open) {
         document.body.style.overflow = "hidden";
-    } else if (!renameModal.classList.contains("open") && !deleteModal.classList.contains("open")) {
+    } else if (!document.querySelector(".action-modal.open")) {
         document.body.style.overflow = "";
     }
 }
 
-function getCurrentImage() {
+function currentImage() {
     return visibleImages[currentIndex] || null;
 }
 
-function clearActionFields() {
-    renameFilename.value = "";
-    renamePassword.value = "";
-    renameError.textContent = "";
-
-    deletePassword.value = "";
-    deleteConfirmation.value = "";
-    deleteError.textContent = "";
+function isOthersUnlocked() {
+    return Boolean(
+        othersAccessToken &&
+        Date.now() < othersAccessExpiresAt
+    );
 }
 
-function setActionBusy(button, busyText, busy) {
+function showStatus(message) {
+    status.textContent = message;
+}
+
+function setButtonBusy(button, busyText, busy) {
+    if (!button) return;
+
     if (busy) {
         if (!button.dataset.originalText) {
             button.dataset.originalText = button.textContent;
@@ -128,11 +161,7 @@ function setActionBusy(button, busyText, busy) {
     }
 }
 
-function showStatus(message) {
-    status.textContent = message;
-}
-
-function validateNewFilename(name, currentName) {
+function validateFilename(name, currentName) {
     const trimmed = name.trim();
 
     if (!trimmed) {
@@ -154,23 +183,28 @@ function validateNewFilename(name, currentName) {
     return "";
 }
 
-async function postAction(endpoint, payload) {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload),
-        cache: "no-store"
-    });
-
-    let data = {};
-
+async function readJsonResponse(response) {
     try {
-        data = await response.json();
-    } catch (error) {
-        data = {};
+        return await response.json();
+    } catch {
+        return {};
     }
+}
+
+async function postAction(endpoint, payload) {
+    const response = await fetch(
+        `${API_BASE_URL}${endpoint}`,
+        {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload),
+            cache: "no-store"
+        }
+    );
+
+    const data = await readJsonResponse(response);
 
     if (!response.ok || data.success === false) {
         throw new Error(
@@ -184,58 +218,110 @@ async function postAction(endpoint, payload) {
 }
 
 // ============================================================
-// LOAD GALLERY
+// PUBLIC GALLERY LOAD
 // ============================================================
 
-async function loadGallery(targetPath = null, reopenLightbox = false) {
+async function loadPublicGallery() {
+    const response = await fetch(
+        `${API_URL}?t=${Date.now()}`,
+        {
+            cache: "no-store"
+        }
+    );
+
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    publicImages = Array.isArray(data.images)
+        ? data.images
+        : [];
+
+    publicCategories = Array.isArray(data.categories)
+        ? data.categories
+        : [];
+
+    protectedCategories = Array.isArray(data.protected_categories)
+        ? data.protected_categories
+        : [];
+
+    allCategories = [
+        ...publicCategories,
+        ...protectedCategories.filter(
+            category => !publicCategories.includes(category)
+        )
+    ];
+}
+
+async function loadProtectedGallery() {
+    if (!isOthersUnlocked()) {
+        othersAccessToken = null;
+        othersAccessExpiresAt = 0;
+        protectedImages = [];
+        return;
+    }
+
+    const response = await fetch(
+        `${API_BASE_URL}/api/others?access=${encodeURIComponent(othersAccessToken)}&t=${Date.now()}`,
+        {
+            cache: "no-store"
+        }
+    );
+
+    if (response.status === 401) {
+        othersAccessToken = null;
+        othersAccessExpiresAt = 0;
+        protectedImages = [];
+        throw new Error("Others access has expired.");
+    }
+
+    if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`);
+    }
+
+    const data = await response.json();
+
+    protectedImages = Array.isArray(data.images)
+        ? data.images
+        : [];
+}
+
+async function loadGallery() {
     try {
-        const selectedCategory = currentCategory;
+        await loadPublicGallery();
 
-        const response = await fetch(
-            `${API_URL}?t=${Date.now()}`,
-            {
-                cache: "no-store"
+        if (currentCategory === "Others") {
+            if (!isOthersUnlocked()) {
+                renderFilters();
+                renderGallery("all");
+                openOthersModal();
+                return;
             }
-        );
 
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+            await loadProtectedGallery();
         }
 
-        const data = await response.json();
-
-        images = Array.isArray(data.images) ? data.images : [];
-
-        const categories = Array.isArray(data.categories)
-            ? data.categories
-            : [];
-
-        if (selectedCategory !== "all" && !categories.includes(selectedCategory)) {
-            currentCategory = "all";
-        }
-
-        createFilters(categories, currentCategory);
+        renderFilters();
         renderGallery(currentCategory);
 
         showStatus(
-            `${images.length} image${images.length === 1 ? "" : "s"}`
+            `${
+                currentCategory === "Others"
+                    ? protectedImages.length
+                    : publicImages.length
+            } image${
+                (
+                    currentCategory === "Others"
+                        ? protectedImages.length
+                        : publicImages.length
+                ) === 1 ? "" : "s"
+            }`
         );
-
-        if (reopenLightbox && targetPath) {
-            const newIndex = visibleImages.findIndex(
-                image => image.path === targetPath
-            );
-
-            if (newIndex >= 0) {
-                currentIndex = newIndex;
-                updateLightbox();
-                setLightboxOpen(true);
-            }
-        }
     } catch (error) {
         console.error("Gallery loading failed:", error);
         showStatus("Unable to load gallery");
-
         gallery.innerHTML = `
             <div class="message">
                 Gallery could not be loaded.
@@ -245,45 +331,83 @@ async function loadGallery(targetPath = null, reopenLightbox = false) {
 }
 
 // ============================================================
-// CATEGORY FILTERS
+// FILTERS
 // ============================================================
 
-function createFilters(categories, activeCategory) {
+function renderFilters() {
     filters.innerHTML = "";
 
-    const allButton = createFilterButton(
-        "All",
-        "all",
-        activeCategory === "all"
+    filters.appendChild(
+        createFilterButton(
+            "All",
+            "all",
+            currentCategory === "all",
+            false
+        )
     );
 
-    filters.appendChild(allButton);
-
-    categories.forEach(category => {
+    publicCategories.forEach(category => {
         filters.appendChild(
             createFilterButton(
                 category,
                 category,
-                activeCategory === category
+                currentCategory === category,
+                false
+            )
+        );
+    });
+
+    protectedCategories.forEach(category => {
+        filters.appendChild(
+            createFilterButton(
+                category,
+                category,
+                currentCategory === category,
+                true
             )
         );
     });
 }
 
-function createFilterButton(label, value, active) {
+function createFilterButton(label, value, active, protectedCategory) {
     const button = document.createElement("button");
 
-    button.className = "filter-btn" + (active ? " active" : "");
-    button.textContent = label;
     button.type = "button";
+    button.className = "filter-btn" + (active ? " active" : "");
 
-    button.addEventListener("click", () => {
-        document
-            .querySelectorAll(".filter-btn")
-            .forEach(btn => btn.classList.remove("active"));
+    if (protectedCategory) {
+        button.classList.add("protected-category");
+    }
 
-        button.classList.add("active");
+    button.textContent = label;
+
+    button.addEventListener("click", async () => {
+        if (value === "Others") {
+            if (!isOthersUnlocked()) {
+                currentCategory = "Others";
+                openOthersModal();
+                return;
+            }
+
+            try {
+                currentCategory = "Others";
+                await loadProtectedGallery();
+                renderFilters();
+                renderGallery("Others");
+                showStatus(`${protectedImages.length} image${protectedImages.length === 1 ? "" : "s"}`);
+            } catch (error) {
+                othersAccessToken = null;
+                othersAccessExpiresAt = 0;
+                currentCategory = "all";
+                renderFilters();
+                renderGallery("all");
+                openOthersModal();
+            }
+            return;
+        }
+
         currentCategory = value;
+        renderFilters();
         renderGallery(value);
     });
 
@@ -297,10 +421,12 @@ function createFilterButton(label, value, active) {
 function renderGallery(category) {
     gallery.innerHTML = "";
 
-    if (category === "all") {
-        visibleImages = [...images];
+    if (category === "Others") {
+        visibleImages = [...protectedImages];
+    } else if (category === "all") {
+        visibleImages = [...publicImages];
     } else {
-        visibleImages = images.filter(
+        visibleImages = publicImages.filter(
             image => image.category === category
         );
     }
@@ -340,7 +466,6 @@ function renderGallery(category) {
 
         overlay.appendChild(filename);
         overlay.appendChild(categoryElement);
-
         card.appendChild(img);
         card.appendChild(overlay);
 
@@ -371,11 +496,9 @@ function openLightbox(index) {
 }
 
 function updateLightbox() {
-    const image = getCurrentImage();
+    const image = currentImage();
 
-    if (!image) {
-        return;
-    }
+    if (!image) return;
 
     lightboxImage.src = image.url;
     lightboxImage.alt = image.name;
@@ -386,19 +509,14 @@ function updateLightbox() {
 }
 
 function closeLightbox() {
-    if (renameModal.classList.contains("open") || deleteModal.classList.contains("open")) {
-        closeActionModals();
-    }
-
+    closeAllActionModals();
     setLightboxOpen(false);
     lightboxImage.src = "";
     lightboxFilename.textContent = "";
 }
 
 function showPrevious() {
-    if (visibleImages.length === 0) {
-        return;
-    }
+    if (visibleImages.length === 0) return;
 
     currentIndex = (
         currentIndex - 1 + visibleImages.length
@@ -408,9 +526,7 @@ function showPrevious() {
 }
 
 function showNext() {
-    if (visibleImages.length === 0) {
-        return;
-    }
+    if (visibleImages.length === 0) return;
 
     currentIndex = (
         currentIndex + 1
@@ -420,15 +536,72 @@ function showNext() {
 }
 
 // ============================================================
+// OTHERS UNLOCK
+// ============================================================
+
+function openOthersModal() {
+    othersPassword.value = "";
+    othersError.textContent = "";
+    setModalOpen(othersModal, true);
+    document.body.style.overflow = "hidden";
+
+    requestAnimationFrame(() => othersPassword.focus());
+}
+
+function closeOthersModal() {
+    setModalOpen(othersModal, false);
+    othersPassword.value = "";
+    othersError.textContent = "";
+
+    if (!lightbox.classList.contains("open") && !document.querySelector(".action-modal.open")) {
+        document.body.style.overflow = "";
+    }
+}
+
+async function unlockOthers() {
+    const password = othersPassword.value;
+
+    if (!password) {
+        othersError.textContent = "Please enter the gallery password.";
+        return;
+    }
+
+    setButtonBusy(othersUnlockBtn, "Unlocking...", true);
+    othersError.textContent = "";
+
+    try {
+        const data = await postAction(
+            "/api/unlock-others",
+            { password }
+        );
+
+        othersAccessToken = data.access_token;
+        othersAccessExpiresAt = Date.now() + (Number(data.expires_in || 1800) * 1000);
+        protectedImages = Array.isArray(data.images) ? data.images : [];
+
+        closeOthersModal();
+
+        currentCategory = "Others";
+        renderFilters();
+        renderGallery("Others");
+        showStatus(`${protectedImages.length} image${protectedImages.length === 1 ? "" : "s"}`);
+
+    } catch (error) {
+        console.error("Others unlock failed:", error);
+        othersError.textContent = error.message;
+    } finally {
+        setButtonBusy(othersUnlockBtn, "Unlock", false);
+        othersPassword.value = "";
+    }
+}
+
+// ============================================================
 // RENAME
 // ============================================================
 
 function openRenameModal() {
-    const image = getCurrentImage();
-
-    if (!image) {
-        return;
-    }
+    const image = currentImage();
+    if (!image) return;
 
     renameFilename.value = image.name;
     renamePassword.value = "";
@@ -451,21 +624,18 @@ function closeRenameModal() {
 
     if (lightbox.classList.contains("open")) {
         document.body.style.overflow = "hidden";
-    } else {
+    } else if (!document.querySelector(".action-modal.open")) {
         document.body.style.overflow = "";
     }
 }
 
 async function submitRename() {
-    const image = getCurrentImage();
-
-    if (!image) {
-        return;
-    }
+    const image = currentImage();
+    if (!image) return;
 
     const newName = renameFilename.value.trim();
     const password = renamePassword.value;
-    const validationError = validateNewFilename(newName, image.name);
+    const validationError = validateFilename(newName, image.name);
 
     if (validationError) {
         renameError.textContent = validationError;
@@ -477,28 +647,169 @@ async function submitRename() {
         return;
     }
 
-    setActionBusy(renameSaveBtn, "Saving...", true);
+    setButtonBusy(renameSaveBtn, "Saving...", true);
     renameError.textContent = "";
 
     try {
-        const data = await postAction("/api/rename", {
-            path: image.path,
-            new_name: newName,
-            password
-        });
+        const data = await postAction(
+            "/api/rename",
+            {
+                path: image.path,
+                new_name: newName,
+                password
+            }
+        );
 
-        const newPath = data.path || `${image.category}/${data.name || newName}`;
+        if (data.access_token && image.category === "Others") {
+            othersAccessToken = data.access_token;
+            othersAccessExpiresAt = Date.now() + (30 * 60 * 1000);
+        }
 
         closeRenameModal();
-        showStatus("Image renamed successfully.");
 
-        await loadGallery(newPath, true);
+        if (image.category === "Others") {
+            await loadProtectedGallery();
+            renderGallery("Others");
+            showStatus("Image renamed successfully.");
+        } else {
+            await loadPublicGallery();
+            renderFilters();
+            renderGallery(currentCategory);
+            showStatus("Image renamed successfully.");
+        }
+
+        // Keep lightbox closed/reopened on the renamed image.
+        if (image.category === "Others") {
+            const idx = visibleImages.findIndex(
+                item => item.path === data.path
+            );
+            if (idx >= 0) {
+                currentIndex = idx;
+                updateLightbox();
+                setLightboxOpen(true);
+            }
+        } else {
+            const idx = visibleImages.findIndex(
+                item => item.path === data.path
+            );
+            if (idx >= 0) {
+                currentIndex = idx;
+                updateLightbox();
+                setLightboxOpen(true);
+            }
+        }
+
     } catch (error) {
         console.error("Rename failed:", error);
         renameError.textContent = error.message;
     } finally {
-        setActionBusy(renameSaveBtn, "Save", false);
+        setButtonBusy(renameSaveBtn, "Save", false);
         renamePassword.value = "";
+    }
+}
+
+// ============================================================
+// MOVE
+// ============================================================
+
+function openMoveModal() {
+    const image = currentImage();
+    if (!image) return;
+
+    moveCategory.innerHTML = "";
+
+    allCategories
+        .filter(category => category !== image.category)
+        .forEach(category => {
+            const option = document.createElement("option");
+            option.value = category;
+            option.textContent = category;
+            moveCategory.appendChild(option);
+        });
+
+    movePassword.value = "";
+    moveError.textContent = "";
+
+    if (moveCategory.options.length === 0) {
+        moveError.textContent = "There are no other folders available.";
+        return;
+    }
+
+    setModalOpen(moveModal, true);
+    document.body.style.overflow = "hidden";
+
+    requestAnimationFrame(() => movePassword.focus());
+}
+
+function closeMoveModal() {
+    setModalOpen(moveModal, false);
+    moveCategory.innerHTML = "";
+    movePassword.value = "";
+    moveError.textContent = "";
+
+    if (lightbox.classList.contains("open")) {
+        document.body.style.overflow = "hidden";
+    } else if (!document.querySelector(".action-modal.open")) {
+        document.body.style.overflow = "";
+    }
+}
+
+async function submitMove() {
+    const image = currentImage();
+    if (!image) return;
+
+    const destinationCategory = moveCategory.value;
+    const password = movePassword.value;
+
+    if (!destinationCategory) {
+        moveError.textContent = "Please select a destination category.";
+        return;
+    }
+
+    if (!password) {
+        moveError.textContent = "Please enter the gallery password.";
+        return;
+    }
+
+    setButtonBusy(moveSaveBtn, "Moving...", true);
+    moveError.textContent = "";
+
+    try {
+        const data = await postAction(
+            "/api/move",
+            {
+                path: image.path,
+                destination_category: destinationCategory,
+                password
+            }
+        );
+
+        if (destinationCategory === "Others" && data.access_token) {
+            othersAccessToken = data.access_token;
+            othersAccessExpiresAt = Date.now() + (30 * 60 * 1000);
+        }
+
+        closeMoveModal();
+        closeLightbox();
+
+        // Re-read category metadata in case folders have changed.
+        await loadPublicGallery();
+
+        if (currentCategory === "Others" && isOthersUnlocked()) {
+            await loadProtectedGallery();
+        }
+
+        renderFilters();
+        renderGallery(currentCategory === "Others" ? "Others" : currentCategory);
+
+        showStatus(`Image moved to ${destinationCategory}.`);
+
+    } catch (error) {
+        console.error("Move failed:", error);
+        moveError.textContent = error.message;
+    } finally {
+        setButtonBusy(moveSaveBtn, "Move", false);
+        movePassword.value = "";
     }
 }
 
@@ -507,11 +818,8 @@ async function submitRename() {
 // ============================================================
 
 function openDeleteModal() {
-    const image = getCurrentImage();
-
-    if (!image) {
-        return;
-    }
+    const image = currentImage();
+    if (!image) return;
 
     deleteFilename.textContent = image.name;
     deletePassword.value = "";
@@ -521,9 +829,7 @@ function openDeleteModal() {
     setModalOpen(deleteModal, true);
     document.body.style.overflow = "hidden";
 
-    requestAnimationFrame(() => {
-        deletePassword.focus();
-    });
+    requestAnimationFrame(() => deletePassword.focus());
 }
 
 function closeDeleteModal() {
@@ -534,17 +840,14 @@ function closeDeleteModal() {
 
     if (lightbox.classList.contains("open")) {
         document.body.style.overflow = "hidden";
-    } else {
+    } else if (!document.querySelector(".action-modal.open")) {
         document.body.style.overflow = "";
     }
 }
 
 async function submitDelete() {
-    const image = getCurrentImage();
-
-    if (!image) {
-        return;
-    }
+    const image = currentImage();
+    if (!image) return;
 
     const password = deletePassword.value;
     const confirmation = deleteConfirmation.value.trim();
@@ -559,53 +862,93 @@ async function submitDelete() {
         return;
     }
 
-    setActionBusy(deleteConfirmBtn, "Deleting...", true);
+    setButtonBusy(deleteConfirmBtn, "Deleting...", true);
     deleteError.textContent = "";
 
     try {
-        await postAction("/api/delete", {
-            path: image.path,
-            password,
-            confirmation: "DELETE"
-        });
+        await postAction(
+            "/api/delete",
+            {
+                path: image.path,
+                password,
+                confirmation: "DELETE"
+            }
+        );
 
         closeDeleteModal();
         closeLightbox();
-        showStatus("Image deleted successfully.");
 
-        await loadGallery();
+        if (image.category === "Others") {
+            await loadProtectedGallery();
+            renderGallery("Others");
+            showStatus("Image deleted successfully.");
+        } else {
+            await loadPublicGallery();
+            renderFilters();
+            renderGallery(currentCategory);
+            showStatus("Image deleted successfully.");
+        }
+
     } catch (error) {
         console.error("Delete failed:", error);
         deleteError.textContent = error.message;
     } finally {
-        setActionBusy(deleteConfirmBtn, "Delete permanently", false);
+        setButtonBusy(deleteConfirmBtn, "Delete permanently", false);
         deletePassword.value = "";
     }
 }
 
-function closeActionModals() {
-    closeRenameModal();
-    closeDeleteModal();
-    clearActionFields();
-}
+// ============================================================
+// MODAL CLOSE / EVENTS
+// ============================================================
 
-// ============================================================
-// EVENT LISTENERS
-// ============================================================
+function closeAllActionModals() {
+    closeOthersModal();
+    closeRenameModal();
+    closeMoveModal();
+    closeDeleteModal();
+}
 
 closeBtn.addEventListener("click", closeLightbox);
 prevBtn.addEventListener("click", showPrevious);
 nextBtn.addEventListener("click", showNext);
 renameBtn.addEventListener("click", openRenameModal);
+moveBtn.addEventListener("click", openMoveModal);
 deleteBtn.addEventListener("click", openDeleteModal);
+
+othersCancelBtn.addEventListener("click", closeOthersModal);
+othersUnlockBtn.addEventListener("click", unlockOthers);
 
 renameCancelBtn.addEventListener("click", closeRenameModal);
 renameSaveBtn.addEventListener("click", submitRename);
 
+moveCancelBtn.addEventListener("click", closeMoveModal);
+moveSaveBtn.addEventListener("click", submitMove);
+
 deleteCancelBtn.addEventListener("click", closeDeleteModal);
 deleteConfirmBtn.addEventListener("click", submitDelete);
 
-// Allow Enter to submit the rename form.
+lightbox.addEventListener("click", event => {
+    if (event.target === lightbox) {
+        closeLightbox();
+    }
+});
+
+for (const modal of [othersModal, renameModal, moveModal, deleteModal]) {
+    modal.addEventListener("click", event => {
+        if (event.target === modal) {
+            setModalOpen(modal, false);
+        }
+    });
+}
+
+othersPassword.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        unlockOthers();
+    }
+});
+
 renameFilename.addEventListener("keydown", event => {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -620,7 +963,13 @@ renamePassword.addEventListener("keydown", event => {
     }
 });
 
-// Allow Enter in the delete confirmation field.
+movePassword.addEventListener("keydown", event => {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        submitMove();
+    }
+});
+
 deleteConfirmation.addEventListener("keydown", event => {
     if (event.key === "Enter") {
         event.preventDefault();
@@ -628,32 +977,17 @@ deleteConfirmation.addEventListener("keydown", event => {
     }
 });
 
-// Close lightbox by clicking the backdrop.
-lightbox.addEventListener("click", event => {
-    if (event.target === lightbox) {
-        closeLightbox();
-    }
-});
-
-// Close action modals by clicking the backdrop.
-renameModal.addEventListener("click", event => {
-    if (event.target === renameModal) {
-        closeRenameModal();
-    }
-});
-
-deleteModal.addEventListener("click", event => {
-    if (event.target === deleteModal) {
-        closeDeleteModal();
-    }
-});
-
-// Keyboard controls.
 document.addEventListener("keydown", event => {
-    if (renameModal.classList.contains("open") || deleteModal.classList.contains("open")) {
-        if (event.key === "Escape") {
-            closeActionModals();
+    if (event.key === "Escape") {
+        if (document.querySelector(".action-modal.open")) {
+            closeAllActionModals();
+            return;
         }
+
+        if (lightbox.classList.contains("open")) {
+            closeLightbox();
+        }
+
         return;
     }
 
@@ -661,9 +995,7 @@ document.addEventListener("keydown", event => {
         return;
     }
 
-    if (event.key === "Escape") {
-        closeLightbox();
-    } else if (event.key === "ArrowLeft") {
+    if (event.key === "ArrowLeft") {
         event.preventDefault();
         showPrevious();
     } else if (event.key === "ArrowRight") {
@@ -673,7 +1005,7 @@ document.addEventListener("keydown", event => {
 });
 
 // ============================================================
-// START GALLERY
+// START
 // ============================================================
 
 loadGallery();
