@@ -528,73 +528,231 @@ h1 {
    /* LIGHTBOX */
 
 .lightbox {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    padding: 25px;
-    background:
-        rgba(0, 0, 0, 0.92);
+    padding: 24px;
+    box-sizing: border-box;
 }
 
 .lightbox.open {
     display: flex;
 }
 
-.lightbox img {
-    max-width: 95vw;
-    max-height: 90vh;
-    object-fit: contain;
-    border-radius: 8px;
+.lightbox-panel {
+    width: min(1180px, 100%);
+    max-height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    position: relative;
 }
 
-
-   /* LIGHTBOX BUTTONS */
-
-
-.lightbox-button {
-    position: fixed;
-    border: none;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    color: #fff;
-    background:
-        rgba(255, 255, 255, 0.12);
-
-    cursor: pointer;
-    font-size: 24px;
+.lightbox-header {
+    width: 100%;
+    min-height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition:
-        background 0.2s ease;
 }
 
-.lightbox-button:hover {
-    background:
-        rgba(255, 255, 255, 0.22);
+.lightbox-filename {
+    max-width: 100%;
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
 }
 
-.close {
-    top: 20px;
-    right: 20px;
+.lightbox-panel > #lightboxImage {
+    width: auto;
+    height: auto;
+    max-width: min(96vw, 1100px);
+    max-height: calc(100vh - 180px);
+    object-fit: contain;
+    display: block;
 }
 
-.prev {
-    left: 20px;
-    top: 50%;
-    transform:
-        translateY(-50%);
+.lightbox-controls {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
-.next {
-    right: 20px;
-    top: 50%;
-    transform:
-        translateY(-50%);
+.lightbox-action {
+    appearance: none;
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    background: rgba(0, 0, 0, 0.48);
+    color: #ffffff;
+    min-width: 82px;
+    padding: 9px 16px;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    cursor: pointer;
+    transition: opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.lightbox-action:hover:not(:disabled),
+.lightbox-action:focus-visible:not(:disabled) {
+    background: rgba(255, 255, 255, 0.16);
+    border-color: rgba(255, 255, 255, 0.65);
+    outline: none;
+}
+
+.lightbox-action:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.lightbox-action-danger {
+    border-color: rgba(255, 120, 120, 0.7);
+}
+
+.lightbox-action-danger:hover:not(:disabled),
+.lightbox-action-danger:focus-visible:not(:disabled) {
+    background: rgba(180, 40, 40, 0.28);
+    border-color: rgba(255, 150, 150, 0.9);
+}
+
+/* ============================================================
+   RENAME / DELETE MODALS
+   ============================================================ */
+
+.action-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.68);
+}
+
+.action-modal.open {
+    display: flex;
+}
+
+.action-modal-panel {
+    width: min(460px, 100%);
+    box-sizing: border-box;
+    padding: 26px;
+    border-radius: 14px;
+    background: #ffffff;
+    color: #171717;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+}
+
+.action-modal-panel h2 {
+    margin: 0 0 8px;
+    font-size: 1.35rem;
+}
+
+.action-modal-description {
+    margin: 0 0 20px;
+    line-height: 1.5;
+    opacity: 0.78;
+}
+
+.action-field-label {
+    display: block;
+    margin: 14px 0 7px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.action-field {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 11px 12px;
+    border: 1px solid #cfcfcf;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #171717;
+    font: inherit;
+    outline: none;
+}
+
+.action-field:focus {
+    border-color: #777777;
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.08);
+}
+
+.delete-target-name {
+    margin: 0 0 16px;
+    padding: 11px 12px;
+    border-radius: 8px;
+    background: #f3f3f3;
+    font-size: 0.92rem;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.action-error {
+    min-height: 22px;
+    margin-top: 10px;
+    color: #b42318;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.action-modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.action-modal-button {
+    appearance: none;
+    border: 1px solid #cfcfcf;
+    background: #ffffff;
+    color: #171717;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font: inherit;
+    cursor: pointer;
+}
+
+.action-modal-button:hover:not(:disabled),
+.action-modal-button:focus-visible:not(:disabled) {
+    border-color: #777777;
+    outline: none;
+}
+
+.action-modal-button:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.action-modal-primary {
+    background: #171717;
+    border-color: #171717;
+    color: #ffffff;
+}
+
+.action-modal-primary:hover:not(:disabled),
+.action-modal-primary:focus-visible:not(:disabled) {
+    background: #303030;
+    border-color: #303030;
+}
+
+.action-modal-danger {
+    background: #b42318;
+    border-color: #b42318;
+    color: #ffffff;
+}
+
+.action-modal-danger:hover:not(:disabled),
+.action-modal-danger:focus-visible:not(:disabled) {
+    background: #8f1c13;
+    border-color: #8f1c13;
 }
 
 
@@ -637,10 +795,32 @@ h1 {
         font-size: 0.7rem;
     }
 
-    .lightbox-button {
-        width: 42px;
-        height: 42px;
-        font-size: 20px;
+    .lightbox {
+        padding: 14px;
+    }
+
+    .lightbox-panel {
+        max-height: calc(100vh - 28px);
+        gap: 12px;
+    }
+
+    .lightbox-panel > #lightboxImage {
+        max-width: 94vw;
+        max-height: calc(100vh - 175px);
+    }
+
+    .lightbox-controls {
+        gap: 7px;
+    }
+
+    .lightbox-action {
+        min-width: 0;
+        flex: 1 1 calc(33.333% - 7px);
+        padding: 9px 10px;
+    }
+
+    .action-modal-panel {
+        padding: 22px;
     }
 
     .prev {

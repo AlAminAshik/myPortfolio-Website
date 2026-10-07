@@ -67,19 +67,73 @@
 
 
          <!-- LIGHTBOX -->
-    <div id="lightbox" class="lightbox">
-        <button id="closeBtn" class="lightbox-button close" aria-label="Close image">
-            &times;
-        </button>
-        <button id="prevBtn" class="lightbox-button prev" aria-label="Previous image">
-            &#8249;
-        </button>
-        <img id="lightboxImage" src="" alt="">
-        <button id="nextBtn" class="lightbox-button next" aria-label="Next image">
-            &#8250;
-        </button>
+    <div id="lightbox" class="lightbox" aria-hidden="true">
+        <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="Gallery image viewer">
+            <div class="lightbox-header">
+                <div id="lightboxFilename" class="lightbox-filename"></div>
+            </div>
+
+            <img id="lightboxImage" src="" alt="">
+
+            <div class="lightbox-controls">
+                <button id="prevBtn" class="lightbox-action" type="button">Previous</button>
+                <button id="renameBtn" class="lightbox-action" type="button">Rename</button>
+                <button id="deleteBtn" class="lightbox-action lightbox-action-danger" type="button">Delete</button>
+                <button id="nextBtn" class="lightbox-action" type="button">Next</button>
+                <button id="closeBtn" class="lightbox-action" type="button">Close</button>
+            </div>
+        </div>
     </div>
 
+
+    
+    <!-- RENAME MODAL -->
+    <div id="renameModal" class="action-modal" aria-hidden="true">
+        <div class="action-modal-panel" role="dialog" aria-modal="true" aria-labelledby="renameModalTitle">
+            <h2 id="renameModalTitle">Rename image</h2>
+            <p class="action-modal-description">Enter the new filename. The image stays in the same gallery category.</p>
+
+            <label class="action-field-label" for="renameFilename">New filename</label>
+            <input id="renameFilename" class="action-field" type="text" autocomplete="off" maxlength="255">
+
+            <label class="action-field-label" for="renamePassword">Gallery password</label>
+            <input id="renamePassword" class="action-field" type="password" autocomplete="current-password">
+
+            <div id="renameError" class="action-error" role="alert"></div>
+
+            <div class="action-modal-buttons">
+                <button id="renameCancelBtn" class="action-modal-button" type="button">Cancel</button>
+                <button id="renameSaveBtn" class="action-modal-button action-modal-primary" type="button">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div id="deleteModal" class="action-modal" aria-hidden="true">
+        <div class="action-modal-panel" role="dialog" aria-modal="true" aria-labelledby="deleteModalTitle">
+            <h2 id="deleteModalTitle">Delete image</h2>
+            <p class="action-modal-description">
+                This permanently deletes the image from the gallery server. This action cannot be undone.
+            </p>
+
+            <div id="deleteFilename" class="delete-target-name"></div>
+
+            <label class="action-field-label" for="deletePassword">Gallery password</label>
+            <input id="deletePassword" class="action-field" type="password" autocomplete="current-password">
+
+            <label class="action-field-label" for="deleteConfirmation">Type DELETE to confirm</label>
+            <input id="deleteConfirmation" class="action-field" type="text" autocomplete="off" spellcheck="false">
+
+            <div id="deleteError" class="action-error" role="alert"></div>
+
+            <div class="action-modal-buttons">
+                <button id="deleteCancelBtn" class="action-modal-button" type="button">Cancel</button>
+                <button id="deleteConfirmBtn" class="action-modal-button action-modal-danger" type="button">Delete permanently</button>
+            </div>
+        </div>
+    </div>
+
+    
      <!-- Footer design -->
     <footer class="footer">
       <div class="social_links_container">
